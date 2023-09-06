@@ -1,0 +1,50 @@
+:PROPERTIES:
+:ID:          20230906T093251
+:END:
+#+TITLE:      Tag Hierarchy
+#+DATE:       [2023-09-06 Wed 09:32]
+#+FILETAGS:   :1wik:
+
+* Table of Contents :TOC_1:
+- [[#mandatory-tags][Mandatory tags]]
+- [[#optional-tags][Optional tags]]
+
+* Mandatory tags
+
+Any note must have from 1 to 3 mandatory tags that allow to classify it. This mandatory tags are easily identifiable since they start with a number from 1 to 3. This will permit the creation of filters to look for specific notes easily. The idea of these mandatory tags is that it should 
+
+First, each note must have a mandatory tag associating it to one of the following areas:
+
+- Mathematics: must have the *1mth* tag.
+- Philosophy: must have the *1phl* tag.
+- Physics: must have the *1phs* tag.
+- Code (practical computer science): must have the *1cs* tag.
+- Notes explaining things about this wiki: must have the *1wk* tag.
+- Cooking: must have the *1ck*.
+  
+Depending on this first mandatory tag the note may have addtional mandatory tags. Below it is explained.
+
+** Mathematics
+
+Mathematics note can have up to two additional mandatory tags (note that it can also have no additional mandatory tags). The idea is that the first tag will put the note in a broad mathematical area, while the second tag will classify the note in a particular area inside the broad area. Below there is a register of all the tags used for this and its meaning.
+
+** Philosophy
+
+** Physics
+
+** Code
+
+Code notes can have up to two additional mandatory tags. The first one will classify the language of the note. The second tag will specify the language or program related to the note (if it has one). For example, emacs configuration files will have tags *2elisp* and *3emacs*, while neovim configuration files could have *2vimscript* or *2lua* and *3neovim*. Below we list the tags used in this wiki:
+
+Languages:
+
+Programs:
+
+** Wiki
+
+Wiki notes do not have any additional mandatory tag apart from *1wk*.
+
+** Cooking
+
+* Optional tags
+

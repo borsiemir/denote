@@ -1,0 +1,1035 @@
+:PROPERTIES:
+:ID:          20230906T085908
+:END:
+#+TITLE:      Emacs Configuration
+#+DATE:       [2023-09-06 Wed 08:59]
+#+FILETAGS:   :1cs:2elisp:3emacs:
+#+AUTO_TANGLE: t
+#+PROPERTY: header-args:elisp :tangle ~/.config/emacs/init.el :mkdirp yes
+
+* Table of Contents :TOC:
+- [[#package-manager][Package Manager]]
+- [[#ui][UI]]
+  - [[#main-fonts][Main Fonts]]
+  - [[#theme][Theme]]
+  - [[#modeline][Modeline]]
+  - [[#bars][Bars]]
+  - [[#fringe-and-internal-borders][Fringe and internal borders]]
+  - [[#window-divider][Window divider]]
+  - [[#think-where-to-put][Think where to put]]
+  - [[#highlight-indent-guides][Highlight indent guides]]
+- [[#evil][Evil]]
+- [[#think-where-to-put-1][THINK WHERE TO PUT]]
+- [[#completition][Completition]]
+  - [[#orderless][Orderless]]
+  - [[#vertico][Vertico]]
+  - [[#marginalia][Marginalia]]
+  - [[#consult][Consult]]
+  - [[#embark][Embark]]
+- [[#control-system][Control system]]
+- [[#org-mode][Org mode]]
+  - [[#org-basic-config][Org basic config]]
+  - [[#org-tempo][Org-tempo]]
+  - [[#additional-org-packages][Additional Org packages]]
+  - [[#denote][Denote]]
+- [[#latex][Latex]]
+- [[#snippets][Snippets]]
+- [[#keybindings][Keybindings]]
+
+* Package Manager
+
+Our chosen package manager is straight.el
+
+#+BEGIN_SRC elisp
+(setq straight-repository-branch "develop")
+
+;; Install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+ (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+(bootstrap-version 6))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+  (url-retrieve-synchronously
+   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+   'silent 'inhibit-cookies)
+(goto-char (point-max))
+(eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+#+END_SRC
+
+use-package uses straight.el
+
+#+BEGIN_SRC elisp
+
+;; Install use-package
+(straight-use-package 'use-package)
+
+;; Configure use-package to use straight.el by default
+(use-package straight
+  :custom
+  (straight-use-package-by-default t))
+
+#+END_SRC
+
+* UI
+
+** Main Fonts
+
+Setting the main fonts.
+- *default* is the default font
+- *fixed-pitch* is the monospace default font
+- *variable-pitch* is the non-monospace default font, e.g. for org files
+
+#+BEGIN_SRC elisp
+(set-face-attribute 'default nil
+                    :font "Iosevka"
+                    :height 130)
+
+(set-face-attribute 'fixed-pitch nil
+                    :font "Iosevka"
+                    :height 130)
+
+(set-face-attribute 'variable-pitch nil
+                    :font "Iosevka"
+                    :height 130)
+#+END_SRC
+
+** Theme
+
+#+BEGIN_SRC elisp
+(use-package gruvbox-theme
+  :config
+  (load-theme 'gruvbox-dark-soft t))
+#+END_SRC
+
+** Modeline
+
+#+BEGIN_SRC elisp
+
+(setq mode-line-background (face-background 'mode-line))
+(setq mode-line-inactive-background (face-background 'mode-line-inactive))
+(set-face-attribute 'mode-line nil
+                    :box `(:line-width 8 :color ,mode-line-background)
+                    :overline nil
+                    :underline nil)
+
+(set-face-attribute 'mode-line-inactive nil
+                    :box `(:line-width 8 :color ,mode-line-inactive-background)
+                    :overline nil
+                    :underline nil)
+#+END_SRC
+
+** Bars
+
+We deactivate all bars
+
+#+BEGIN_SRC elisp
+
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)
+
+#+END_SRC
+
+We add a minimap at the right.
+
+** Fringe and internal borders
+
+First, we set the internal border.
+
+#+BEGIN_SRC elisp
+(set-frame-parameter nil 'internal-border-width 24)
+#+END_SRC
+
+Now we modify different aspects of the fringe.
+
+#+BEGIN_SRC elisp
+(fringe-mode '(8 . 0))
+(setq bookmark-set-fringe-mark nil)
+(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+#+END_SRC
+
+** Window divider
+
+#+BEGIN_SRC elisp
+
+;; Vertical window divider
+(setq window-divider-default-right-width 24)
+(setq window-divider-default-places 'right-only)
+(window-divider-mode 1)
+(set-face-attribute 'window-divider nil
+		    :foreground (face-background 'default))
+(set-face-attribute 'window-divider-first-pixel nil
+		    :foreground (face-background 'default))
+(set-face-attribute 'window-divider-last-pixel nil
+		    :foreground (face-background 'default))
+
+#+END_SRC
+
+** Think where to put
+
+#+BEGIN_SRC elisp
+
+;; Better filling
+(setq-default fill-column 80)
+;(setq-default auto-fill-function 'do-auto-fill)
+;; Tabs produces whitespaces
+(setq-default indent-tabs-mode nil)
+(setq-default electric-indent-inhibit t)
+(setq-default tab-width 2)
+;; hl-mode
+(global-hl-line-mode -1)
+;; blink-cursor
+(blink-cursor-mode 0)
+
+
+#+END_SRC
+
+** Highlight indent guides
+
+#+BEGIN_SRC elisp
+
+(use-package highlight-indent-guides
+  :custom
+  (highlight-indent-guides-method 'bitmap)
+  (highlight-indent-guides-bitmap-function
+   'highlight-indent-guides--bitmap-line)
+  )
+
+#+END_SRC
+
+* Evil
+
+#+BEGIN_SRC elisp
+
+;;; Vim Bindings
+(use-package evil
+  :demand t
+  :init
+  ;; Changing tags for displaying in the modeline
+  (setq evil-insert-state-tag "INSERT")
+  (setq evil-visual-state-tag "VISUAL")
+  (setq evil-replace-state-tag "REPLACE")
+  (setq evil-normal-state-tag "NORMAL")
+  (setq evil-replace-state-tag "REPLACE")
+  (setq evil-motion-state-tag "MOTION")
+  (setq evil-emacs-state-tag "EMACS")
+  (setq evil-operator-state-tag "OPERATOR")
+  (setq evil-want-integration t)  ;; For evil collection
+  (setq evil-want-keybinding nil) ;; For evil collection
+  :config
+  ;; Activating evil mode
+  (evil-mode 1)
+  )
+(evil-define-key 'motion 'global
+    "j" 'evil-next-visual-line
+    "k" 'evil-previous-visual-line)
+
+(defun my/jk-exit-insert ()
+  (interactive)
+  (let* ((initial-key ?j)
+         (final-key ?k)
+         (timeout 0.5)
+         (event (read-event nil nil timeout)))
+    (if event
+        ;; timeout met
+        (if (and (characterp event) (= event final-key))
+          (evil-normal-state)
+          (insert initial-key)
+          (push event unread-command-events))
+      ;; timeout exceeded
+      (insert initial-key))))
+
+(evil-define-key 'insert 'global
+  (kbd "j")
+  'my/jk-exit-insert)
+
+;;; Vim Bindings Everywhere else
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+#+END_SRC
+
+* THINK WHERE TO PUT
+
+#+BEGIN_SRC elisp
+(electric-indent-mode -1)
+(add-hook 'prog-mode-hook 'electric-indent-local-mode)
+(add-hook 'emacs-lisp-mode-hook 'electric-indent-local-mode)
+(setq backup-directory-alist `(("." . "~/.saves")))
+#+END_SRC
+
+* Completition
+
+** Orderless
+
+#+BEGIN_SRC elisp
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+#+END_SRC
+
+** Vertico
+
+#+BEGIN_SRC elisp
+(use-package vertico
+  :init
+  (vertico-mode)
+  :config
+  (evil-define-key nil vertico-map
+    (kbd "C-j") 'vertico-next
+    (kbd "C-k") 'vertico-previous)
+  )
+#+END_SRC
+
+** Marginalia
+
+#+BEGIN_SRC elisp
+(use-package marginalia
+  :bind (:map minibuffer-local-map
+         ("M-A" . marginalia-cycle))
+  :init
+  ;; Marginalia must be actived in the :init section of use-package such that
+  ;; the mode gets enabled right away. Note that this forces loading the
+  ;; package.
+  (marginalia-mode)
+  )
+#+END_SRC
+
+** Consult
+
+#+BEGIN_SRC elisp
+(use-package consult
+  ;; Replace bindings. Lazily loaded due by `use-package'.
+  :bind (;; C-c bindings in `mode-specific-map'
+         ("C-c M-x" . consult-mode-command)
+         ("C-c h" . consult-history)
+         ("C-c k" . consult-kmacro)
+         ("C-c m" . consult-man)
+         ("C-c i" . consult-info)
+         ([remap Info-search] . consult-info)
+         ;; C-x bindings in `ctl-x-map'
+         ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+         ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+         ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+         ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+         ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+         ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ;; Custom M-# bindings for fast register access
+         ("M-#" . consult-register-load)
+         ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+         ("C-M-#" . consult-register)
+         ;; Other custom bindings
+         ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+         ;; M-g bindings in `goto-map'
+         ("M-g e" . consult-compile-error)
+         ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+         ("M-g g" . consult-goto-line)             ;; orig. goto-line
+         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+         ("M-g m" . consult-mark)
+         ("M-g k" . consult-global-mark)
+         ("M-g i" . consult-imenu)
+         ("M-g I" . consult-imenu-multi)
+         ;; M-s bindings in `search-map'
+         ("M-s d" . consult-find)
+         ("M-s D" . consult-locate)
+         ("M-s g" . consult-grep)
+         ("M-s G" . consult-git-grep)
+         ("M-s r" . consult-ripgrep)
+         ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
+         ("M-s k" . consult-keep-lines)
+         ("M-s u" . consult-focus-lines)
+         ;; Isearch integration
+         ("M-s e" . consult-isearch-history)
+         :map isearch-mode-map
+         ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+         ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+         ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+         ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+         ;; Minibuffer history
+         :map minibuffer-local-map
+         ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+         ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+
+  ;; Enable automatic preview at point in the *Completions* buffer. This is
+  ;; relevant when you use the default completion UI.
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; The :init configuration is always executed (Not lazy)
+  :init
+
+  ;; Optionally configure the register formatting. This improves the register
+  ;; preview for `consult-register', `consult-register-load',
+  ;; `consult-register-store' and the Emacs built-ins.
+  (setq register-preview-delay 0.5
+        register-preview-function #'consult-register-format)
+
+  ;; Optionally tweak the register preview window.
+  ;; This adds thin lines, sorting and hides the mode line of the window.
+  (advice-add #'register-preview :override #'consult-register-window)
+
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+
+  ;; Configure other variables and modes in the :config section,
+  ;; after lazily loading the package.
+  :config
+
+  ;; Optionally configure preview. The default value
+  ;; is 'any, such that any key triggers the preview.
+  ;; (setq consult-preview-key 'any)
+  ;; (setq consult-preview-key "M-.")
+  ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+  ;; For some commands and buffer sources it is useful to configure the
+  ;; :preview-key on a per-command basis using the `consult-customize' macro.
+  (consult-customize
+   consult-theme :preview-key '(:debounce 0.2 any)
+   consult-ripgrep consult-git-grep consult-grep
+   consult-bookmark consult-recent-file consult-xref
+   consult--source-bookmark consult--source-file-register
+   consult--source-recent-file consult--source-project-recent-file
+   ;; :preview-key "M-."
+   :preview-key '(:debounce 0.4 any))
+
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well. >
+  (setq consult-narrow-key "<") ;; "C-+"
+
+  ;; Optionally make narrowing help available in the minibuffer.
+  ;; You may want to use `embark-prefix-help-command' or which-key instead.
+  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+  ;; By default `consult-project-function' uses `project-root' from project.el.
+  ;; Optionally configure a different project root function.
+  ;;;; 1. project.el (the default)
+  ;; (setq consult-project-function #'consult--default-project--function)
+  ;;;; 2. vc.el (vc-root-dir)
+  ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+  ;;;; 3. locate-dominating-file
+  ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+  ;;;; 4. projectile.el (projectile-project-root)
+  ;; (autoload 'projectile-project-root "projectile")
+  ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+  ;;;; 5. No project support
+  ;; (setq consult-project-function nil)
+)
+#+END_SRC
+
+** Embark
+
+TODO
+
+* Control system
+
+#+BEGIN_SRC elisp
+(use-package magit)
+#+END_SRC
+
+* Org mode
+
+** Org basic config
+
+#+BEGIN_SRC elisp
+(use-package org
+  :init
+  (setq org--inhibit-version-check nil)
+  :custom
+  ;; Some UI settings
+  (org-ellipsis " …")
+  (org-hide-emphasis-markers t)
+  (org-pretty-entities t)
+  
+  ;; Org cycle 
+  (org-cycle-include-plain-lists 'integrate)
+
+  ;; Latex preview
+  (org-startup-with-latex-preview t)
+  (org-preview-latex-default-process 'dvipng)
+  (org-format-latex-options
+      '(:foreground "#EBDBB2"
+        :scale 1.5
+        :matchers ("begin" "\\(" "\\[")))
+
+  ;; Org source codeblocks
+  (org-src-fontify-natively t)
+  (org-edit-src-content-indentation 0)
+  (org-src-preserve-indentation t)
+  (org-src-tab-acts-natively t)
+  (org-src-window-setup 'current-window)
+  (org-src-strip-leading-and-trailing-blank-lines t)
+
+  ;; Org drawers folded on startup
+  (org-startup-folded "fold")
+
+  ;; Openinig org link behaviour
+  (org-link-frame-setup
+       '((vm . vm-visit-folder-other-frame)
+         (vm-imap . vm-visit-imap-folder-other-frame)
+         (gnus . org-gnus-no-new-news)
+         (file . find-file)
+         (wl . wl-other-frame)))
+
+  :config
+  ;; Setting faces
+  (set-face-attribute 'org-document-title nil
+                      :height 1.5)
+  (set-face-attribute 'org-level-1 nil
+                      :height 1.4)
+  (set-face-attribute 'org-level-2 nil
+                      :height 1.3)
+  (set-face-attribute 'org-level-3 nil
+                      :height 1.1)
+  (set-face-attribute 'org-level-4 nil
+                      :height 0.9)
+  (set-face-attribute 'org-level-5 nil
+                      :height 0.9)
+  (set-face-attribute 'org-level-6 nil
+                     :height 0.9)
+  (set-face-attribute 'org-block nil
+                      :background (face-background 'default))
+  (set-face-attribute 'org-block-begin-line nil
+                      :background (face-background 'default))
+  (set-face-attribute 'org-block-end-line nil
+                      :background (face-background 'default)))
+
+(evil-define-key 'motion org-mode-map
+  (kbd "RET")
+  'org-open-at-point)
+#+END_SRC
+
+** Org-tempo
+
+#+BEGIN_SRC elisp
+(require 'org-tempo)
+
+(setq org-structure-template-alist
+      '(("a" . "EXPORT ASCII")
+        ("c" . "CENTER")
+        ("C" . "COMMENT")
+        ("e" . "EXAMPLE")
+        ("E" . "EXPORT")
+        ("h" . "EXPORT HTML")
+        ("l" . "EXPORT LATEX")
+        ("q" . "QUOTE")
+        ("s" . "SRC")
+        ("v" . "VERSE")
+        ("md" . "DEFINITION")
+        ("mt" . "THEOREM")
+        ("ml" . "LEMMA")
+        ("mc" . "COROLLARY")
+        ("el" . "SRC elisp")))
+
+(setq org-tempo-keywords-alist
+      '(("L" . "LATEX")
+        ("H" . "HTML")
+        ("A" . "ASCII")
+        ("i" . "INDEX")
+        ("I" . "INCLUDE")))
+#+END_SRC
+
+** Additional Org packages
+
+#+BEGIN_SRC elisp
+(use-package org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode))
+
+(use-package org-modern
+  :after org
+  :hook (org-mode . org-modern-mode))
+
+(use-package org-transclusion
+  :after org
+  :hook (org-mode . org-transclusion-add-all)
+  :config
+  ;; Auto preview latex
+  (add-hook 'org-transclusion-after-add-functions
+        #'(lambda (_beg _end) (org-latex-preview '(16))))
+  (set-face-attribute 'org-transclusion nil
+                      :extend t
+                      :background "#374247") 
+  (set-face-attribute 'org-transclusion-fringe nil
+                      :foreground (face-background 'default)
+                      :background (face-background 'default))
+  (set-face-attribute 'org-transclusion-source-fringe nil
+                        :foreground (face-background 'default)
+                        :background (face-background 'default)))
+
+(use-package mixed-pitch
+  :hook
+  (org-mode . mixed-pitch-mode))
+
+(use-package toc-org
+  :commands toc-org-enable
+  :hook
+  (org-mode . toc-org-enable))
+
+(defun my/org-mode-visual-fill ()
+  (setq visual-fill-column-width 80
+        visual-fill-column-center-text t
+        visual-fill-column-fringes-outside-margins nil)
+  (visual-line-mode 1)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :hook (org-mode . my/org-mode-visual-fill))
+#+END_SRC
+
+** Denote
+
+#+BEGIN_SRC elisp
+
+(defun my/denote-directory-setup ()
+  "Create denote directory if non-existent and then asign it to be the
+  denote directory"
+  (let ((denote-dir (file-truename "~/Documents/denote/")))
+    (unless (file-exists-p denote-dir)
+      (make-directory denote-dir))
+    (setq denote-directory denote-dir)))
+
+(use-package denote
+  :config
+  (my/denote-directory-setup)
+  (setq denote-org-front-matter
+    ":PROPERTIES:
+:ID:          %4$s
+:END:
+,#+TITLE:      %1$s
+,#+DATE:       %2$s
+,#+FILETAGS:   %3$s
+\n")
+  (denote-rename-buffer-mode 1)
+  (setq denote-known-keywords '("moc"))
+
+  (add-hook 'dired-mode-hook #'denote-dired-mode))
+
+;; Register Denote's Org dynamic blocks
+(require 'denote-org-dblock)
+(add-hook 'before-save-hook #'org-update-all-dblocks)
+
+(use-package denote-menu)
+#+END_SRC
+
+* Latex
+
+#+BEGIN_SRC elisp
+(use-package tex
+  :straight auctex
+  :defer t
+  :config
+  (setq-default TeX-engine 'luatex)
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+  ;;(add-hook 'LaTeX-mode-hook 'flyspell-mode)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  ;;(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  ;;(setq reftex-plug-into-AUCTeX t)
+  ;;(setq TeX-PDF-mode t)
+  (setq-default TeX-master nil)
+  (setq TeX-view-program-selection '((output-pdf "Zathura"))
+      TeX-source-correlate-start-server t)
+                                                            
+  ;; Update PDF buffers after successful LaTeX runs
+  (add-hook 'TeX-after-compilation-finished-functions
+           #'TeX-revert-document-buffer))
+#+END_SRC
+
+* Snippets
+
+#+BEGIN_SRC elisp
+;;; yas-snippet
+(use-package yasnippet
+  :custom
+  (yas-snippet-dirs '("~/.config/emacs/snippets"))
+  (yas-triggers-in-field t)
+  :config
+  (yas-global-mode 1))
+
+;;; auto-activate-snippets
+(defun not-texmathp ()
+  "Negation of texmathp function."
+  (not (texmathp)))
+       
+(defun word-equal-to (string)
+  "Check if the word at point is equal to STRING."
+  (equal (thing-at-point 'word) string))
+
+(defun word-at-beginning-of-line (string)
+  "Check if going backward the length of the STRING
+when are at the beginning of the line at point."
+  (thing-at-point-looking-at (concat "\n[[:space:]]*" string)))
+
+(use-package aas
+  :hook (LaTeX-mode . aas-activate-for-major-mode)
+  :hook (org-mode . aas-activate-for-major-mode)
+  :config
+  (aas-set-snippets 'latex-mode
+    ;;; ENVIROMENTS
+    ;; Inlinemath -- activates when the word at point is mm
+    ;; and we are not in math mode already
+
+    :cond (lambda () (and (word-equal-to "mm") (not-texmathp)))
+    "mm" (lambda () (interactive)
+           (yas-expand-snippet "\\\\( $1 \\\\)$0"))
+
+    ;; Displaymath -- activates when we are at the start of
+    ;; a line and we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "nn") (not-texmathp)))
+    "nn" (lambda () (interactive)
+           (yas-expand-snippet "\\[\n  $0\n\\]"))
+
+    ;; Itemize -- activates when we are at the start of
+    ;; a line and we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "itt") (not-texmathp)))
+    "itt" (lambda () (interactive)
+            (yas-expand-snippet "\\begin{itemize}\n\\item $0\n\\end{itemize}"))
+
+    ;; Enumerate -- activates when we are at the start of
+    ;; a line and we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "enn") (not-texmathp)))
+    "enn" (lambda () (interactive)
+            (yas-expand-snippet "\\begin{enumerate}\n\\item $0\n\\end{enumerate}"))
+
+    ;; Definition -- activates when we are at the start of a line and
+    ;; we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "df") (not-texmathp)))
+    "df" (lambda () (interactive)
+            (yas-expand-snippet "\\definition{$1}{$2}{\n  $0\n}"))
+
+    ;; Theorem -- activates when we are at the start of a line and
+    ;; we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "th") (not-texmathp)))
+    "th" (lambda () (interactive)
+            (yas-expand-snippet "\\theorem{$1}{$2}{\n  $0\n}"))
+
+    ;; Lemma -- activates when we are at the start of a line and
+    ;; we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "lm") (not-texmathp)))
+    "lm" (lambda () (interactive)
+            (yas-expand-snippet "\\lemma{$1}{$2}{\n  $0\n}"))
+
+    ;; Corollary -- activates when we are at the start of a line and
+    ;; we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "cr") (not-texmathp)))
+    "cr" (lambda () (interactive)
+            (yas-expand-snippet "\\corollary{$1}{$2}{\n  $0\n}"))
+
+    ;; Question -- activates when we are at the start of a line and
+    ;; we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "qu") (not-texmathp)))
+    "qu" (lambda () (interactive)
+            (yas-expand-snippet "\\question{$1}{$2}{\n  $0\n}"))
+
+    ;; Proof -- activates when we are at the start of a line and
+    ;; we are not in math mode yet
+    :cond (lambda () (and (word-at-beginning-of-line "pf") (not-texmathp)))
+    "pf" (lambda () (interactive)
+            (yas-expand-snippet "\\proof{\n  $0\n}"))
+
+    ;; Greek letters -- activates the library of greek letters with ;g
+    :cond (lambda () (texmathp))
+    ";ga"  "\\alpha"
+    ";gb"  "\\beta"
+    ";gg"  "\\gamma"
+    ";gd"  "\\delta"
+    ";ge"  "\\epsilon"
+    ";gve" "\\varepsilon"
+    ";gz"  "\\zeta"
+    ";gh"  "\\eta"
+    ";go"  "\\theta"
+    ";gi"  "\\iota"
+    ";gk"  "\\kappa"
+    ";gl"  "\\lambda"
+    ";gm"  "\\mu"
+    ";gn"  "\\nu"
+    ";gx"  "\\xi"
+    ";gp"  "\\pi"
+    ";gr"  "\\rho"
+    ";gw"  "\\sigma"
+    ";gt"  "\\tau"
+    ";gy"  "\\upsilon"
+    ";gvf" "\\varphi"
+    ";gf"  "\\phi"
+    ";gc"  "\\chi"
+    ";gs"  "\\psi"
+    ";gu"  "\\omega"
+    ";gA"  "\\Alpha"
+    ";gB"  "\\Beta"
+    ";gG"  "\\Gamma"
+    ";gD"  "\\Delta"
+    ";gO"  "\\Theta"
+    ";gL"  "\\Lambda"
+    ";gX"  "\\Xi"
+    ";gP"  "\\Pi"
+    ";gW"  "\\Sigma"
+    ";gF"  "\\Phi"
+    ";gS"  "\\Psi"
+    ";gU"  "\\Omega"
+
+    ;; Blackboard letters -- they activate in texmath
+    :cond (lambda () (texmathp))
+    ";ba" "\\bbA"
+    ";bb" "\\bbB"
+    ";bc" "\\bbC"
+    ";bd" "\\bbD"
+    ";be" "\\bbE"
+    ";bf" "\\bbF"
+    ";bg" "\\bbG"
+    ";bh" "\\bbH"
+    ";bi" "\\bbI"
+    ";bj" "\\bbJ"
+    ";bk" "\\bbK"
+    ";bl" "\\bbL"
+    ";bm" "\\bbM"
+    ";bn" "\\bbN"
+    ";bo" "\\bbO"
+    ";bp" "\\bbP"
+    ";bq" "\\bbQ"
+    ";br" "\\bbR"
+    ";bs" "\\bbS"
+    ";bt" "\\bbT"
+    ";bu" "\\bbU"
+    ";bv" "\\bbV"
+    ";bw" "\\bbW"
+    ";bx" "\\bbX"
+    ";by" "\\bbY"
+    ";bz" "\\bbZ"
+
+    ;; Calligraphic letters -- they activate in texmath
+    :cond (lambda () (texmathp))
+    ";ca" "\\calA"
+    ";cb" "\\calB"
+    ";cc" "\\calC"
+    ";cd" "\\calD"
+    ";ce" "\\calE"
+    ";cf" "\\calF"
+    ";cg" "\\calG"
+    ";ch" "\\calH"
+    ";ci" "\\calI"
+    ";cj" "\\calJ"
+    ";ck" "\\calK"
+    ";cl" "\\calL"
+    ";cm" "\\calM"
+    ";cn" "\\calN"
+    ";co" "\\calO"
+    ";cp" "\\calP"
+    ";cq" "\\calQ"
+    ";cr" "\\calR"
+    ";cs" "\\calS"
+    ";ct" "\\calT"
+    ";cu" "\\calU"
+    ";cv" "\\calV"
+    ";cw" "\\calW"
+    ";cx" "\\calX"
+    ";cy" "\\calY"
+    ";cz" "\\calZ"
+
+    ;; Fraktur letters -- they activate in texmath. Lowercase and
+    ;; uppercase are switched since uppercase are more common, so its
+    ;; better that its trigger is easier to write
+    :cond (lambda () (texmathp))
+
+    ;Lowercase
+    ";fa" "\\frakA"
+    ";fb" "\\frakB"
+    ";fc" "\\frakC"
+    ";fd" "\\frakD"
+    ";fe" "\\frakE"
+    ";ff" "\\frakF"
+    ";fg" "\\frakG"
+    ";fh" "\\frakH"
+    ";fi" "\\frakI"
+    ";fj" "\\frakJ"
+    ";fk" "\\frakK"
+    ";fl" "\\frakL"
+    ";fm" "\\frakM"
+    ";fn" "\\frakN"
+    ";fo" "\\frakO"
+    ";fp" "\\frakP"
+    ";fq" "\\frakQ"
+    ";fr" "\\frakR"
+    ";fs" "\\frakS"
+    ";ft" "\\frakT"
+    ";fu" "\\frakU"
+    ";fv" "\\frakV"
+    ";fw" "\\frakW"
+    ";fx" "\\frakX"
+    ";fy" "\\frakY"
+    ";fz" "\\frakZ"
+
+    ;Uppercase
+    ";fA" "\\fraka"
+    ";fB" "\\frakb"
+    ";fC" "\\frakc"
+    ";fD" "\\frakd"
+    ";fE" "\\frake"
+    ";fF" "\\frakf"
+    ";fG" "\\frakg"
+    ";fH" "\\frakh"
+    ";fI" "\\fraki"
+    ";fJ" "\\frakj"
+    ";fK" "\\frakk"
+    ";fL" "\\frakl"
+    ";fM" "\\frakm"
+    ";fN" "\\frakn"
+    ";fO" "\\frako"
+    ";fP" "\\frakp"
+    ";fQ" "\\frakq"
+    ";fR" "\\frakr"
+    ";fS" "\\fraks"
+    ";fT" "\\frakt"
+    ";fU" "\\fraku"
+    ";fV" "\\frakv"
+    ";fW" "\\frakw"
+    ";fX" "\\frakx"
+    ";fY" "\\fraky"
+    ";fZ" "\\frakz"
+
+    ;;; STYLE SNIPPETS
+
+    ;; Snipets that are always expanded
+    :cond (lambda () t)
+
+    ; Bold: 
+    ";;b" (lambda () (interactive)
+            (if (texmathp)
+                (yas-expand-snippet "\\mathbf{$1}$0")
+              (yas-expand-snippet "\\textbf{$1}$0")))
+
+    ; Small capitals
+    ";;c" (lambda () (interactive)
+            (yas-expand-snippet "\\textsc{$1}$0"))
+
+    ";;f" (lambda () (interactive)
+            (yas-expand-snippet "\\textsf{$1}$0"))
+
+    ;; Snippets that are expanded only in math contexts
+    :cond (lambda () (texmathp))
+
+    ; Downscript
+    ";;d" (lambda () (interactive)
+            (yas-expand-snippet "_{$1}$0"))
+
+    ; Superscript
+    ";;s" (lambda () (interactive)
+            (yas-expand-snippet "^{$1}$0"))
+
+    ; Both: subscript and superscript
+    ";;a" (lambda () (interactive)
+            (yas-expand-snippet "^{$1}_{$2}$0"))
+
+    ; Text
+    ";;t" (lambda () (interactive)
+            (yas-expand-snippet "\\text{$1}$0"))
+
+    ;; Snippets that are expandind only outside math contexts
+    :cond (lambda () (not-texmathp))
+
+    ; Emphasis
+    ";;e" (lambda () (interactive)
+            (yas-expand-snippet "\\emph{$1}$0"))
+
+    ; Italics
+    ";;i" (lambda () (interactive)
+            (yas-expand-snippet "\\textit{$1}$0"))))
+#+END_SRC
+
+* Keybindings
+
+#+BEGIN_SRC elisp
+(use-package general
+  :config
+  (general-evil-setup t)
+
+  (general-create-definer bsm/leader-key
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (general-create-definer bsm/local-leader-key
+    :states '(normal insert visual emacs) 
+    :keymaps 'override
+    :prefix ";"
+    :global-prefix "C-;")
+  )
+
+(use-package which-key
+  :config
+  (which-key-mode)
+  )
+
+(bsm/leader-key
+  "f" '(:ignore t :wk "Find")
+  "ff" '(find-file :wk "file")
+  "fb" '(consult-bookmark :wk "bookmark")
+  )
+
+(bsm/leader-key
+  "b" '(:ignore t :wk "Buffer")
+  "bb" '(consult-buffer :wk "switch")
+  "bj" '(next-buffer :wk "next")
+  "bk" '(previous-buffer :wk "previous")
+  "bq" '(kill-this-buffer :wk "kill this")
+  "br" '(revert-buffer :wk "reload")
+  )
+
+(bsm/leader-key
+  "e" '(:ignore t :wk "Evaluate elisp")
+  "eb" '(eval-buffer :wk "in buffer")
+  "ed" '(eval-defun :wk "defun after or in point")
+  "ee" '(eval-expression :wk "expression")
+  "el" '(eval-last-sexp :wk "expression before point")
+  "er" '(eval-region :wk "in region")
+  )
+
+(bsm/leader-key
+  "h" '(:ignore t :wk "Help (Describe)")
+  "hv" '(describe-variable :wk "variable")
+  "hf" '(describe-function :wk "function")
+  "hm" '(describe-mode :wk "mode")
+  "hk" '(describe-key :wk "key")
+  "hb" '(describe-bindings :wk "current keybindings")
+  )
+
+(bsm/leader-key
+  "t" '(:ignore t :wk "Toggle")
+  "tn" '(display-line-numbers-mode :wk "linenumbers")
+  "ti" '(highlight-indent-guides-mode :wk "highlight indent")
+  "tt" '(visual-line-mode :wk "truncated lines")
+  )
+
+(bsm/local-leader-key
+  :keymaps 'LaTeX-mode-map
+  "c" '(TeX-command-master :wk "Command master")
+  "v" '(TeX-view :wk "View")
+  "a" '(TeX-command-rule-all :wk "Run all")
+  )
+
+(bsm/local-leader-key
+  :keymaps 'org-mode-map
+  "e" '(org-edit-special :wk "edit src block")
+  "RET" '(org-open-at-point :wk "open link")
+  )
+
+(bsm/leader-key
+  "n" '(:ignore t :wk "Notes")
+  "nn" '(denote :wk "new")
+  "no" '(denote-open-or-create :wk "open")
+  "nm" '(list-denotes :wk "menu")
+  "nl" '(denote-link :wk "link")
+  )
+#+END_SRC
