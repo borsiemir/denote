@@ -1,0 +1,100 @@
+:PROPERTIES:
+:ID:          20230909T163239
+:END:
+#+TITLE:      Poset
+#+DATE:       [2023-09-09 Sat 16:32]
+#+FILETAGS:   :1mth:2ordertheory:
+
+* Definition
+
+#+BEGIN_DEFINITION
+A /poset/ \(P\) consists in
+ * \(A : \textsf{Set}\),
+ * \(\_ \leq \_ : \textsf{BinRel}(A)\),
+such that
+ * \(\leq \text{ is reflexive}\),
+ * \(\leq \text{ is transitive}\),
+ * \(\leq \text{ is antisymmetric}\).
+   
+\(A\) is called the /domain/ of \(P\), denoted as \(\text{Dom}(P)\).
+#+END_DEFINITION
+
+* Important concepts
+
+#+BEGIN_VARIABLE
+During this section, we have the following variable conventions:
+ * \(P : \textsf{Poset}\).
+#+END_VARIABLE
+
+#+BEGIN_DEFINITION
+We define \(\text{strict} : \textsf{BinRel}(P)\) as:
+\[
+\text{strict}(a,b) := a \leq b \wedge a \neq b.
+\]
+We will denote \(\text{strict}\) as \(\_ < \_\).
+#+END_DEFINITION
+
+
+
+#+BEGIN_DEFINITION
+We define \(\text{upperBounds} : \wp(P) \longrightarrow \wp(P)\), as:
+\[\text{upperBounds}(X) := \{p : P \mid \forall x : X \mathbin{.} x \leq p\}.\]
+
+We also define \(\text{lowerBounds} : \wp(P) \longrightarrow \wp(P)\), as:
+\[\text{lowerBounds}(X) := \{p : P \mid \forall x : X \mathbin{.} p \leq x\}.\]
+#+END_DEFINITION
+
+#+BEGIN_DEFINITION
+We define \(\_ \mathrel{\text{maximal in}} \_ : P \longrightarrow \wp(P) \longrightarrow \Omega\) as:
+\[
+p \mathrel{\text{maximal in}} X := p \in X \wedge \neg \exists x : X \mathbin{.} p \leq x
+.\]
+
+Similarly, we define \(\_ \mathrel{\text{minimal in}} \_ : P \longrightarrow \wp(P) \longrightarrow \Omega\) as:
+\[
+p \mathrel{\text{minimal in}} X := p \in X \wedge \neg \exists x : X \mathbin{.} x \leq p
+.\]
+#+END_DEFINITION
+
+#+BEGIN_DEFINITION
+We define \(\_ \mathrel{\text{maximum of}} \_ : P \longrightarrow \wp(P) \longrightarrow \Omega\) as:
+\[
+p \mathrel{\text{maximum of}} X := p \in X \cap \text{upperBounds}(X)
+.\]
+
+Similarly, we define \(\_ \mathrel{\text{minimum of}} \_ : P \longrightarrow \wp(P) \longrightarrow \Omega\) as:
+\[
+p \mathrel{\text{minimum of}} X := p \in X \cap \text{lowerBounds}(X)
+.\]
+#+END_DEFINITION
+
+#+BEGIN_DEFINITION
+We define \(\_ \mathrel{\text{supremum of}} \_ : P \longrightarrow \wp(P) \longrightarrow \Omega\) as:
+\[
+p \mathrel{\text{supremum of}} X := p \in {\text{upperBounds}(X)} \wedge \forall q : \text{upperBounds}(X) \mathbin{.} p \leq q
+.\]
+
+Similarly, we define \(\_ \mathrel{\text{infimum of}} \_ : P \longrightarrow \wp(P) \longrightarrow \Omega\) as:
+\[
+p \mathrel{\text{infimum of}} X := p \in {\text{lowerBounds}(X)} \wedge \forall q : \text{lowerBounds}(X) \mathbin{.} q \leq p
+.\]
+#+END_DEFINITION
+
+#+BEGIN_DEFINITION
+We define \(\_ \mathrel{\text{covers}} \_ : P \longrightarrow P \longrightarrow \Omega\) as:
+\[
+a \mathrel{\text{covers}} b := a < b \wedge \forall x : P\mathbin{.} a \leq x \leq b \Rightarrow a = x \vee b = x.
+\]
+#+END_DEFINITION
+
+#+BEGIN_DEFINITION
+We define \( [\_,\_] : P \longrightarrow P \longrightarrow \wp(P)\) as:
+\[
+[a,b] := \{p : P \mid a \leq p \leq b\}
+.\]
+
+Similarly, we define \( (\_,\_) : P \longrightarrow P \longrightarrow \wp(P)\) as:
+\[
+(a,b) := \{p : P \mid a < p < b\}
+.\]
+#+END_DEFINITION

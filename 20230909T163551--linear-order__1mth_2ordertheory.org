@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:          20230909T163551
+:END:
+#+TITLE:      Linear Order
+#+DATE:       [2023-09-09 Sat 16:35]
+#+FILETAGS:   :1mth:2ordertheory:
+
+* Definition
+
+#+BEGIN_DEFINITION
+A /linear order/ \(L\) is a [[denote:20230909T163239][Poset]] such that
+ * \(\forall x,y : L\mathbin{.} x \leq y \vee y \leq x\).
+#+END_DEFINITION

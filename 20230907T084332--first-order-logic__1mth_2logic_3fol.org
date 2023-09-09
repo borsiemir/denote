@@ -1,0 +1,35 @@
+:PROPERTIES:
+:ID:          20230907T084332
+:END:
+#+TITLE:      First Order Logic
+#+DATE:       [2023-09-07 Thu 08:43]
+#+FILETAGS:   :1mth:2logic:3fol:
+
+* Table of Contents :TOC:
+- [[#syntax][Syntax]]
+  - [[#languages][Languages]]
+- [[#semantics][Semantics]]
+
+* Syntax  
+
+** Languages
+
+#+transclude: [[id:20230907T093054][FOL Language]] :exclude-elements
+
+* Semantics
+
+#+BEGIN_DEFINITION
+Let \(\sigma : \textsf{FOL-Lang}\), we define the type of \(\sigma\textsf{-Struc}\) as the record type:
+  * \(\text{Domain} : \textsf{Set}\),
+  * \(\text{FInterp} : \prod f : \text{Symb}. (\text{Domain})^{\text{arity}(f)} \longrightarrow \text{Domain}\),
+  * \(\text{RInterp} : \prod f : \text{Symb}. \wp\left(\text{Domain}^{\text{arity}(f)}\right)\).
+
+Given \(\mathfrak{M} : \sigma\textsf{-Struc}\), \(f: \text{FSymb}_{\sigma}\) and \(R : \textsf{RSymb}_\sigma\) we will write:
+\begin{align*}
+  &\text{f}^{\mathfrak{M}} \text{ meaning } \text{FInterp}(f), \\
+  &\text{R}^{\mathfrak{M}} \text{ meaning } \text{RInterp}(R).
+\end{align*}
+
+If in addition we have a set \(V\) of variables, we can extend the record type \(\sigma\textsf{-Struc}\) to \((\sigma,V)\textsf{-Model}\) by adding the following field:
+  * \(text{assign} : V \longrightarrow \text{Domain}
+#+END_DEFINITION

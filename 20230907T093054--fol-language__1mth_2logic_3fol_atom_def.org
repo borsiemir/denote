@@ -1,0 +1,28 @@
+:PROPERTIES:
+:ID:          20230907T093054
+:END:
+#+TITLE:      FOL Language
+#+DATE:       [2023-09-07 Thu 09:30]
+#+FILETAGS:   :1mth:2logic:3fol:atom:def:
+
+#+BEGIN_DEFINITION
+A /first order language/ is a an element of the record type \(\textsf{FOL-Lang}\) defined as:
+  * \(\text{FSymb} : \textsf{Set}\),
+  * \(\text{RSymb} : \textsf{Set}\),
+  * \(\text{arity} : \textsf{FSymb} \times \textsf{RSymb} \longrightarrow \mathbb{N}\).
+such that
+  * \(\text{FSymb},\text{RSymb}\) are disjoint,
+  * For any \(R : \text{RSymb}\) we have that \(\text{arity}(R) > 0\). 
+The members of \(\text{RSymb}\) are called /relation symbols/ and the elements of \(\text{FSymb}\) are called /function symbols/. 
+
+Given \(n : \mathbb{N}\) we define the set of /\(n\)-ary function symbols/ as
+\[
+\text{FSymb}_{n} := \{f : \text{FSymb} \mid \text{arity}(f) = n\},
+\]
+and in particular we define the set of /constants/ as \(\text{Cons} := \text{FSymb}_0\).
+
+Given \(n : \mathbb{N}^+\) we define he set of /\(n\)-ary relation symbols/ as
+\[
+\text{RSymb}_{n} := \{R : \text{RSymb} \mid \text{arity}(R) = n\}.
+\]
+#+END_DEFINITION

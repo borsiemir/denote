@@ -1,0 +1,116 @@
+:PROPERTIES:
+:ID:          20230909T163102
+:END:
+#+TITLE:      Lattice
+#+DATE:       [2023-09-09 Sat 16:31]
+#+FILETAGS:   :1mth:2ordertheory:
+
+
+* Definition
+
+** Order Definition
+
+#+BEGIN_DEFINITION
+A /lattice/ \(L\) is a [[denote:20230909T163239][Poset]] such that
+ * \(\text{Dom} \text{ is non-empty}\),
+ * \(\forall x,y : L \mathbin{.} (\exists s : L \mathbin{.} s \mathrel{\text{supremum of}} \{x,y\}) \wedge (\exists i : L \mathbin{.} i \mathrel{\text{infimum of}} \{x,y\})\).
+#+END_DEFINITION
+
+
+** Algebraic Definition
+
+#+BEGIN_DEFINITION
+A /lattice/ \(L\) consists of:
+
+#+END_DEFINITION
+
+** Equivalence between constructions
+
+We see that we can go from (order) lattices to algebraic lattices and back.
+
+#+BEGIN_DEFINITION
+We define \(\text{ord-to-alg} : \text{Lattice}_{\textsf{Ord}}\longrightarrow \textsf{Lattice}_{\textsf{Alg}}\) as:
+\[
+\langle L, \leq \rangle \mapsto \langle L , \text{sup}(\_,\_), \text{inf}(\_,\_)\rangle.
+\]
+#+END_DEFINITION
+#+BEGIN_PROOF
+We need to ensure that given a lattice defined via order \(\langle L,\leq \rangle\), we have that \(\langle L , \text{sup}(\_,\_), \text{inf}(\_,\_)\rangle\) is a lattice defined via algebra. In order to do so, we have to show that it fulfills the algebraic equations. Commutativity of the operations is trivial.
+
+ * \(\text{sup}\) is associative. Let \(a,b,c : L\), let \(s := \text{sup}(\text{sup}(a,b),c) \) and \(t :=   \text{sup}(a,\text{sup}(b,c))\). To show that \(s = t\) we have to show that:
+
+   1. \(s \leq t\). Note that \(c \leq \text{sup}(b,c) \leq t\). Also, since \(a \leq t\) and \(b \leq \text{sup}(b,c) \leq t\) we have that \(t\) is an upper bound of \(\{b,c\}\) and then \(\text{sup}(b,c) \leq t\). This implies that \(t\) is an upper bound of \(\{a,\text{sup}(b,c)\}\), so \(s \leq t\).
+
+   2. \(t \leq s\). Analogous to 1.
+
+ * \(\text{inf}\) is associative. Similar to \(\text{sup}\) case.
+   
+ * \(a = \text{sup}(a,\text{inf}(a,b))\). \(\leq\) is trivial, so we only need to show \(\geq\). It suffices to see that \(a\) is an upper bound of \(\{a,\text{inf}(a,b)\}\), which is trivial.
+   
+ * \(a = \text{inf}(a,\text{sup}(a,b))\). Analogous to previous case.
+#+END_PROOF
+
+#+BEGIN_DEFINITION
+We define \(\text{alg-to-ord} : \text{Lattice}_{\textsf{Alg}}\longrightarrow \textsf{Lattice}_{\textsf{Org}}\) as:
+\[
+\langle L, \vee, \wedge \rangle \mapsto \langle L , \lambda x,y\mathbin{.} x = x \wedge y\rangle.
+\]
+#+END_DEFINITION
+#+BEGIN_PROOF
+Let us call \(\lambda x,y \mathbin{.} x = x \wedge y\) as \(\leq\). First, we need to show that \(\leq\) is a partial order.
+
+ * Reflexiviy. It is clear be previous lemma that \(x = x \wedge x\).
+   
+ * Transitivity. Let \(x = x \wedge y\) and \(y = y \wedge z\). Then
+   \[ x = x \wedge y = x \wedge (y \wedge z) = (x \wedge y) \wedge z = x \wedge z. \]
+   
+ * Antisymmetry. Let \(x = x \wedge y\) and \(y = y \wedge x\). Then
+   \[ x = x \wedge y = y \wedge x = y.\]
+   
+Finally, we have to show that given \(x,y : L\) we have supremum and infimum of \(\{x,y\}\). The idea is quite straighforward:
+  * \(x \vee y \mathrel{\text{supremum of}} \{x,y\}\). Note that \(x \wedge (x \vee y) = x \vee y\) and \(y \wedge (x \vee y) = x \vee y\) by the absorption laws, so \(x \vee y \in \text{upperBounds}(\{x,y\})\). Now, let \(z \in \text{upperBounds}(\{x,y\})\), so \(x = x \wedge z, y = y \wedge z\). Note that then
+\begin{align*}
+&x \vee z = (x \wedge z) \vee z = z, \\
+&y \vee z = (y \wedge z) \vee z = z. \\
+\end{align*}
+  So \((x \vee y) \vee z = x \vee (y \vee z) = x \vee z = z\), and then
+\[
+(x \vee y) \wedge z = (x \vee y) \wedge ((x \vee y) \vee z) = x \vee y,
+\]
+  where for the third equality we used absorption. But this means \(x \vee y \leq z\).
+    
+  * \(x \wedge y \mathrel{\text{infimum of}} \{x,y\}\). It is easy to show that \(x \wedge y \leq x,y\) since \(x \wedge x = x\) and \(y \wedge y = y\). Let \(z \in \text{lowerBounds}(\{x,y\})\), so \(z = z \wedge x\) and \(z = z \wedge y\). Then
+\[
+z \wedge (x \wedge y) = (z \wedge x) \wedge y = z \wedge y = z.
+\]
+  But this means \(z \leq x \wedge y\).
+#+END_PROOF
+
+#+BEGIN_LEMMA
+\(\text{ord-to-alg}^{-1} = \text{alg-to-ord}\).
+#+END_LEMMA
+#+BEGIN_PROOF
+\(\text{alg-to-ord}\circ\text{ord-to-alg} = \text{id}\). We have to show that
+\[
+{x \leq y} \Leftrightarrow {x = \text{inf}(x,y)}
+.\]
+But this is trivial.
+
+\(\text{ord-to-alg}\circ\text{alg-to-ord} = \text{id}\). Let us call \(\lambda x,y \mathbin{.} x = x \wedge y\) as \(\leq\). Then, we have to show that
+\begin{align*}
+ &x \vee y \mathrel{\text{supremum}_{\leq}\text{ of}} \{x,y\}, \\
+ &x \wedge y \mathrel{\text{infimum}_{\leq}\text{ of}} \{x,y\}.
+\end{align*}
+But we already did this in the proof of the definition of \(\text{alg-to-ord}\).
+#+END_PROOF
+
+Also, we note that we have an alternative definition of the order from the algebraic operations.
+#+BEGIN_LEMMA
+Let \(L : \text{Lattice}_{\text{Alg}}\). Then:
+\[\forall x,y : L\mathbin{.}x = x \wedge y \Leftrightarrow y = y \vee x.\]
+#+END_LEMMA
+PROVE IT
+
+So, we have the picture:
+
+DRAW PICTURE:
