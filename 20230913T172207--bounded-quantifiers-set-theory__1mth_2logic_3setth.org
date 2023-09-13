@@ -1,0 +1,21 @@
+:PROPERTIES:
+:ID:          20230913T172207
+:END:
+#+TITLE:      Bounded Quantifiers (Set Theory)
+#+DATE:       [2023-09-13 Wed 17:22]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+#+begin_Definition
+Let \(\mathcal{L}\) be an extension of \(\mathcal{L}_\in\). We define the operations:
+\[
+\forall \_ \in \_ \mathbin{.} \_ : \textsf{Var} \times \textsf{Term}_{\mathcal{L}} \times \textsf{Form}_{\mathcal{L}} \longrightarrow \textsf{Form}_{\mathcal{L}},
+\]
+\[
+\exists \_ \in \_ \mathbin{.} \_ : \textsf{Var} \times \textsf{Term}_{\mathcal{L}} \times \textsf{Form}_{\mathcal{L}} \longrightarrow \textsf{Form}_{\mathcal{L}},
+\]
+called /bounded quantifiers/, as
+\begin{align*}
+&\forall x \in t \mathbin{.}\phi := \forall x \mathbin{.} x \in t \rightarrow \phi, \\
+&\exists x \in t \mathbin{.}\phi := \exists x \mathbin{.} x \in t \wedge \phi.
+\end{align*}
+#+end_Definition

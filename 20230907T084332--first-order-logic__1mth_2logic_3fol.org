@@ -5,16 +5,11 @@
 #+DATE:       [2023-09-07 Thu 08:43]
 #+FILETAGS:   :1mth:2logic:3fol:
 
-* Table of Contents :TOC:
-- [[#syntax][Syntax]]
-  - [[#languages][Languages]]
-- [[#semantics][Semantics]]
-
 * Syntax  
 
 ** Languages
 
-#+transclude: [[id:20230907T093054][FOL Language]] :exclude-elements
+#+TRANSCLUDE: [[id:20230907T093054][FOL Language]] :exclude-elements "keyword"
 
 * Semantics
 
@@ -31,5 +26,4 @@ Given \(\mathfrak{M} : \sigma\textsf{-Struc}\), \(f: \text{FSymb}_{\sigma}\) and
 \end{align*}
 
 If in addition we have a set \(V\) of variables, we can extend the record type \(\sigma\textsf{-Struc}\) to \((\sigma,V)\textsf{-Model}\) by adding the following field:
-  * \(text{assign} : V \longrightarrow \text{Domain}
 #+END_DEFINITION

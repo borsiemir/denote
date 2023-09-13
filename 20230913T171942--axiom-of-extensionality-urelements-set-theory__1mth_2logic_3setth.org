@@ -1,0 +1,11 @@
+:PROPERTIES:
+:ID:          20230913T171942
+:END:
+#+TITLE:      Axiom of Extensionality (Urelements Set Theory)
+#+DATE:       [2023-09-13 Wed 17:19]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+#+begin_Definition
+The /axiom of extensionality/, \(\text{Ext}\), is the following \(\mathcal{L}_{\text{Ur}}\)-formula: 
+\[\forall x,y : \text{Set} \mathbin{.} (\forall z \mathbin{.}{z \in x} \leftrightarrow {z \in y}) \rightarrow x = y.\]
+#+end_Definition

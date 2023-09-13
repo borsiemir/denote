@@ -1,0 +1,12 @@
+:PROPERTIES:
+:ID:          20230913T161450
+:END:
+#+TITLE:      Standard Language of Set Theory
+#+DATE:       [2023-09-13 Wed 16:14]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+#+BEGIN_Definition
+The /standard language of set theory/, denoted as \(\mathcal{L}_\in\), is the [[denote:20230907T093054][first order signature]] given by:
+- A binary relation symbol \(\in\).  
+Given a structure \(\mathfrak{M} : \textsf{Struc}(\mathcal{L}_{\in})\), \(\in^{\mathfrak{M}}\) is called the /belonging relation/.
+#+END_Definition

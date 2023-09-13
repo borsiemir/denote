@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:          20230913T164525
+:END:
+#+TITLE:      Bounded Formulas (Arithmetic)
+#+DATE:       [2023-09-13 Wed 16:45]
+#+FILETAGS:   :1mth:2logic:3arithmetic:
+

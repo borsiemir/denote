@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:          20230913T170427
+:END:
+#+TITLE:      Axioms of First Order Set Theory
+#+DATE:       [2023-09-13 Wed 17:04]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+We group different axioms of first order set theory and we explain the rationale behind them. We assume that we work in the language \(\mathcal{L}_\in\) or in an extension.
+
+* Extensionality
+
+#+transclude: [[id:20230913T162030][Axiom of Extensionality]] :exclude-elements "keyword"
+
+The rationale behind the axiom of extensionality is straightforward: if two sets have the same elements, then they are equal. 
+
+** Urelements Version
+
+The urelements version is the natural adaptation when we have objects that may not be set. Note that any two urlements do have the same elements (none), but they are not equal.
+
+#+transclude: [[id:20230913T171942][Axiom of Extensionality (Urelements Set Theory)]] :exclude-elements "keyword"
+
+* Separation

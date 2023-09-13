@@ -7,7 +7,7 @@
 
 * Definition
 
-#+BEGIN_DEFINITION
+#+BEGIN_Definition
 A /poset/ \(P\) consists in
  * \(A : \textsf{Set}\),
  * \(\_ \leq \_ : \textsf{BinRel}(A)\),
@@ -17,7 +17,7 @@ such that
  * \(\leq \text{ is antisymmetric}\).
    
 \(A\) is called the /domain/ of \(P\), denoted as \(\text{Dom}(P)\).
-#+END_DEFINITION
+#+END_Definition
 
 * Important concepts
 

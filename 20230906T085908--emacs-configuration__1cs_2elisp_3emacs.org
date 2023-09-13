@@ -7,34 +7,34 @@
 #+AUTO_TANGLE: t
 #+PROPERTY: header-args:elisp :tangle ~/.config/emacs/init.el :mkdirp yes
 
-* Table of Contents :TOC:
-- [[#package-manager][Package Manager]]
-- [[#ui][UI]]
-  - [[#main-fonts][Main Fonts]]
-  - [[#theme][Theme]]
-  - [[#modeline][Modeline]]
-  - [[#bars][Bars]]
-  - [[#fringe-and-internal-borders][Fringe and internal borders]]
-  - [[#window-divider][Window divider]]
-  - [[#think-where-to-put][Think where to put]]
-  - [[#highlight-indent-guides][Highlight indent guides]]
-- [[#evil][Evil]]
-- [[#think-where-to-put-1][THINK WHERE TO PUT]]
-- [[#completition][Completition]]
-  - [[#orderless][Orderless]]
-  - [[#vertico][Vertico]]
-  - [[#marginalia][Marginalia]]
-  - [[#consult][Consult]]
-  - [[#embark][Embark]]
-- [[#control-system][Control system]]
-- [[#org-mode][Org mode]]
-  - [[#org-basic-config][Org basic config]]
-  - [[#org-tempo][Org-tempo]]
-  - [[#additional-org-packages][Additional Org packages]]
-  - [[#denote][Denote]]
-- [[#latex][Latex]]
-- [[#snippets][Snippets]]
-- [[#keybindings][Keybindings]]
+* Table of Contents :TOC_2_org:
+- [[Package Manager][Package Manager]]
+- [[UI][UI]]
+  - [[Main Fonts][Main Fonts]]
+  - [[Theme][Theme]]
+  - [[Modeline][Modeline]]
+  - [[Bars][Bars]]
+  - [[Fringe and internal borders][Fringe and internal borders]]
+  - [[Window divider][Window divider]]
+  - [[Think where to put][Think where to put]]
+  - [[Highlight indent guides][Highlight indent guides]]
+- [[Evil][Evil]]
+- [[THINK WHERE TO PUT][THINK WHERE TO PUT]]
+- [[Completition][Completition]]
+  - [[Orderless][Orderless]]
+  - [[Vertico][Vertico]]
+  - [[Marginalia][Marginalia]]
+  - [[Consult][Consult]]
+  - [[Embark][Embark]]
+- [[Control system][Control system]]
+- [[Org mode][Org mode]]
+  - [[Org basic config][Org basic config]]
+  - [[Org-tempo][Org-tempo]]
+  - [[Additional Org packages][Additional Org packages]]
+  - [[Denote][Denote]]
+- [[Latex][Latex]]
+- [[Snippets][Snippets]]
+- [[Keybindings][Keybindings]]
 
 * Package Manager
 
@@ -499,9 +499,15 @@ TODO
   (set-face-attribute 'org-block nil
                       :background (face-background 'default))
   (set-face-attribute 'org-block-begin-line nil
-                      :background (face-background 'default))
+                      :extend t
+                      :background (face-background 'default)
+                      :overline t)
   (set-face-attribute 'org-block-end-line nil
-                      :background (face-background 'default)))
+                      :extend t
+                      :background (face-background 'default)
+                      :underline '(:color foreground-color 
+                                   :style line 
+                                   :position t)))
 
 (evil-define-key 'motion org-mode-map
   (kbd "RET")
@@ -517,17 +523,17 @@ TODO
       '(("a" . "EXPORT ASCII")
         ("c" . "CENTER")
         ("C" . "COMMENT")
-        ("e" . "EXAMPLE")
+        ("e" . "Example")
         ("E" . "EXPORT")
         ("h" . "EXPORT HTML")
         ("l" . "EXPORT LATEX")
         ("q" . "QUOTE")
         ("s" . "SRC")
         ("v" . "VERSE")
-        ("md" . "DEFINITION")
-        ("mt" . "THEOREM")
-        ("ml" . "LEMMA")
-        ("mc" . "COROLLARY")
+        ("md" . "Definition")
+        ("mt" . "Theorem")
+        ("ml" . "Lemma")
+        ("mc" . "Corollary")
         ("el" . "SRC elisp")))
 
 (setq org-tempo-keywords-alist
@@ -547,7 +553,9 @@ TODO
 
 (use-package org-modern
   :after org
-  :hook (org-mode . org-modern-mode))
+  :hook (org-mode . org-modern-mode)
+  :config
+  (setq org-modern-block-fringe nil))
 
 (use-package org-transclusion
   :after org
@@ -558,9 +566,6 @@ TODO
         #'(lambda (_beg _end) (org-latex-preview '(16))))
   (set-face-attribute 'org-transclusion nil
                       :extend t
-                      :background "#374247") 
-  (set-face-attribute 'org-transclusion-fringe nil
-                      :foreground (face-background 'default)
                       :background (face-background 'default))
   (set-face-attribute 'org-transclusion-source-fringe nil
                         :foreground (face-background 'default)

@@ -7,12 +7,13 @@
 
 #+BEGIN_DEFINITION
 A /first order language/ is a an element of the record type \(\textsf{FOL-Lang}\) defined as:
-  * \(\text{FSymb} : \textsf{Set}\),
-  * \(\text{RSymb} : \textsf{Set}\),
-  * \(\text{arity} : \textsf{FSymb} \times \textsf{RSymb} \longrightarrow \mathbb{N}\).
+- \(\text{FSymb} : \textsf{Set}\),
+- \(\text{RSymb} : \textsf{Set}\),
+- \(\text{arity} : \textsf{FSymb} \times \textsf{RSymb} \longrightarrow \mathbb{N}\).
 such that
-  * \(\text{FSymb},\text{RSymb}\) are disjoint,
-  * For any \(R : \text{RSymb}\) we have that \(\text{arity}(R) > 0\). 
+- \(\text{FSymb},\text{RSymb}\) are disjoint,
+  + Other
+- For any \(R : \text{RSymb}\) we have that \(\text{arity}(R) > 0\). 
 The members of \(\text{RSymb}\) are called /relation symbols/ and the elements of \(\text{FSymb}\) are called /function symbols/. 
 
 Given \(n : \mathbb{N}\) we define the set of /\(n\)-ary function symbols/ as

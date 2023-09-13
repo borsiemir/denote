@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:          20230913T164459
+:END:
+#+TITLE:      Bounded Formulas (Set Theory)
+#+DATE:       [2023-09-13 Wed 16:44]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+#+begin_Definition
+Let \(\mathcal{L}\) be an extension of \(\mathcal{L}_\in\). We define the set of /bounded formulas/, \(\Delta_0\), as the set given by the following BNF:
+\[
+\Delta_0 ::= \phi \mid \Delta_0 \wedge \Delta_0 \mid \Delta_0 \vee \Delta_0 \mid \Delta_0 \rightarrow \Delta_0 \mid 
+\forall x \in t\mathbin{.} \Delta_0 \mid \exists x \in t \mathbin{.} \Delta_0,
+\]
+where \(\phi\) is any atomic formula and \(t\) is any term.
+
+In other words, bounded formulas are formulas whose all their [[denote:20230913T172207][quantifiers are bounded]].
+#+end_Definition

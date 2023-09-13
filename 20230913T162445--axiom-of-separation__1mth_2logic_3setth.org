@@ -1,0 +1,22 @@
+:PROPERTIES:
+:ID:          20230913T162445
+:END:
+#+TITLE:      Axiom of Separation
+#+DATE:       [2023-09-13 Wed 16:24]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+* Definiton
+
+#+begin_Definition
+Let \(\mathcal{L}\) be an extension of [[denote:20230913T161450][\(\mathcal{L}_\in\)]]. The /axiom (schema) of separation (for \(\mathcal{L}\))/, \(\text{SEP}\), is the collection of axioms given by the universal closure of the following axiom-schema:
+\[ \{\forall x \exists y \forall z \mathbin{.} z \in y \leftrightarrow z \in x \wedge \phi \mid \phi : \textsf{Form}_\mathcal{L} \text{ and } y \not\in\text{fv}(\phi)\}.\]
+#+end_Definition
+
+* Restricted Axiom of Separation
+
+#+begin_Definition
+Let \(\mathcal{L}\) be an extension of [[denote:20230913T161450][\(\mathcal{L}_\in\)]] and \(\Gamma \subseteq \text{Form}_{\mathcal{L}}\). Then the /axiom (schema) of separation for \(\Gamma\)/, \(\Gamma\text{-}\text{Sep}\), is defined as
+\[
+\{ \forall x \exists y \forall z \mathbin{.} z \in y \leftrightarrow z \in x \wedge \phi \mid \phi : \Gamma \text{ and } y \not\in \text{fv}(\phi)\}
+.\]
+#+end_Definition

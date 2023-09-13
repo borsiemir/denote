@@ -1,0 +1,13 @@
+:PROPERTIES:
+:ID:          20230913T170934
+:END:
+#+TITLE:      Language of Set Theory with Urelements
+#+DATE:       [2023-09-13 Wed 17:09]
+#+FILETAGS:   :1mth:2logic:3setth:
+
+#+BEGIN_Definition
+The /language of set theory/, denoted as \(\mathcal{L}_{\text{Ur}}\), is the first order signature extending [[denote:20230913T161450][\(\mathcal{L}_\in\)]] with:
+- An unary predicate symbol \(\text{Ur}\).
+- An unary predicate symbol \(\text{Set}\).
+Given a structure \(\mathfrak{M} : \textsf{Struc}(\mathcal{L}_{\text{Ur}}_{})\), the elements of \(\text{Ur}^{\mathfrak{M}}\) are called the /urelements/ of \(\mathfrak{M}\) and the elements of \(\text{Set}^{\mathfrak{M}}\) are called the /sets/ of \(\mathfrak{M}\).
+#+END_Definition
